@@ -42,13 +42,15 @@ sudo install lazygit /usr/local/bin
 rm -f lazygit.tar.gz
 
 # Nvidia stuff
+mok-dir="${HOME}/.mok-files"
+
 sudo apt install mokutil openssl nvidia-driver
-mkdir ~/.mok-files
-openssl req -new -x509 -newkey rsa:2048 -keyout ~/.mok-files/MOK.priv -outform DER -out ~/.mok-files/MOK.der -nodes -days 36500 -subj "/CN=${USER}/"
-sudo mokutil --import ~/.mok-files/MOK.der
+mkdir ${mok-dir}
+openssl req -new -x509 -newkey rsa:2048 -keyout ${mok-dir}/MOK.priv -outform DER -out ${mok-dir}/MOK.der -nodes -days 36500 -subj "/CN=${USER}/"
+sudo mokutil --import ${mok-dir}/MOK.der
 
 for module in $(ls /lib/modules/$(uname -r)/updates/dkms/); do
-    sudo /usr/src/linux-headers-$(uname -r)/scripts/sign-file sha256 ./MOK.priv ./MOK.der /lib/modules/$(uname -r)/updates/dkms/${module}
+    sudo /usr/src/linux-headers-$(uname -r)/scripts/sign-file sha256 ${mok-dir}/MOK.priv ${mok-dir}/MOK.der /lib/modules/$(uname -r)/updates/dkms/${module}
 done
 
 # Install Brave browser
