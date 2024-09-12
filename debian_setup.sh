@@ -2,7 +2,7 @@
 # ==================================================================
 #  Notes: Very basic. No proper logic. Needs work.
 # ==================================================================
-#
+
 # Update the system
 sudo apt update && sudo apt upgrade -y
 
